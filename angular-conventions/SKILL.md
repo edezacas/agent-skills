@@ -4,7 +4,7 @@ description: Mandatory Angular conventions. Activate ALWAYS before writing, modi
 license: Apache-2.0
 metadata:
   author: edezacas
-  version: "1.1"
+  version: "1.2"
 ---
 
 # Angular Conventions
