@@ -52,3 +52,13 @@ this.myService.getData()
   .pipe(takeUntilDestroyed(this.destroyRef))
   .subscribe(data => this.data.set(data));
 ```
+
+## Control Flow
+
+Use `@if`, `@for`, `@switch` — never `*ngIf`, `*ngFor`, `*ngSwitch`.
+
+- `@for` must always have a `track` on a unique property (e.g. `track item.id`); use `$index` only for static lists.
+- Use `@empty` inside `@for` for the zero-items case.
+- Prefer `as` in `@if` to avoid re-evaluating expensive expressions.
+
+Reference: https://angular.dev/guide/templates/control-flow
