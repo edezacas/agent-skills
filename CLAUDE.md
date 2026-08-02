@@ -1,7 +1,7 @@
 # edezacas Skills
 
 ## Overview
-Shared Claude Code skills for the team. Provides automatic and slash-command skills loaded via symlinks into `~/.claude/skills/`.
+edezacas shared Claude Code skills. Provides automatic and slash-command skills loaded via symlinks into `~/.claude/skills/`.
 
 ## Stack
 - Skills: Markdown (`SKILL.md`) — no build step, agentskills.io format

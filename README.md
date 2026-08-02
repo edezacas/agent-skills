@@ -1,6 +1,6 @@
 # edezacas Skills
 
-Team shared AI skills in the [agentskills.io](https://agentskills.io) format. Work with Claude Code, OpenAI Codex, VS Code Copilot, and any compatible agent.
+edezacas shared AI skills in the [agentskills.io](https://agentskills.io) format. Work with Claude Code, OpenAI Codex, VS Code Copilot, and any compatible agent.
 
 ## Skills
 
@@ -58,3 +58,7 @@ Skills follow the agentskills.io format (`SKILL.md` + standard frontmatter). Pla
 1. Create a folder: lowercase, hyphens only.
 2. Add `SKILL.md` with `name` and `description` frontmatter.
 3. Run `npx skills add edezacas/agent-skills` on each machine to install.
+
+## License
+
+[MIT](LICENSE)

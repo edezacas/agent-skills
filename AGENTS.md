@@ -1,7 +1,7 @@
 # edezacas Skills
 
 ## Overview
-Shared AI coding skills for the team. Each skill is a directory with a `SKILL.md` file following the agentskills.io format.
+edezacas shared AI coding skills. Each skill is a directory with a `SKILL.md` file following the agentskills.io format.
 
 ## Stack
 - Skills: Markdown (`SKILL.md`) — no build step, agentskills.io format
