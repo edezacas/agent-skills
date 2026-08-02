@@ -41,7 +41,7 @@ ln -s ~/projects/agent-skills/spdd-implement ~/.claude/skills/spdd-implement
 /spdd-canvas magic link authentication
 ```
 
-Generates a REASONS canvas at `docs/prompts/SPDD-YYYY-MM-DD-slug.md`. Once reviewed:
+Generates a REASONS canvas at `docs/prompts/SPDD-YYYY-MM-DD-HHMM-slug.md`. Once reviewed:
 
 ```
 /spdd-implement

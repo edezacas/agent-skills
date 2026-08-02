@@ -20,7 +20,7 @@ evals/workspace/                      # gitignored — local eval results go her
 
 ## Conventions
 - `SKILL.md` files are pure Markdown — no agent-specific syntax
-- Canvas files follow the naming pattern `SPDD-YYYY-MM-DD-slug.md`
+- Canvas files follow the naming pattern `SPDD-YYYY-MM-DD-HHMM-slug.md`
 - Unresolved canvas items are marked `⚠️ Confirm:` and must be resolved before implementation
 
 ## Gotchas
