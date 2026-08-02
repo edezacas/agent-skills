@@ -7,7 +7,6 @@ Team shared AI skills in the [agentskills.io](https://agentskills.io) format. Wo
 | Skill | Trigger | Description |
 |---|---|---|
 | `angular-conventions` | automatic | Core Angular conventions: `inject()`, signals, `takeUntilDestroyed`, NgModule |
-| `ascetic-angular-conventions` | automatic | Team libraries: `@Type` from `@digitalascetic/ngx-object-transformer`, `FormService` from `@digitalascetic/ngx-form` |
 | `init-project` | automatic | Guide for creating and editing `CLAUDE.md` in any project |
 | `spdd-canvas` | `/spdd-canvas` | Generates a REASONS canvas before writing code |
 | `spdd-implement` | `/spdd-implement` | Implements a feature from its SPDD canvas |
@@ -27,7 +26,6 @@ Restart Claude Code to pick up the new skills.
 git clone git@github.com:edezacas/agent-skills.git ~/projects/agent-skills
 mkdir -p ~/.claude/skills
 ln -s ~/projects/agent-skills/angular-conventions ~/.claude/skills/angular-conventions
-ln -s ~/projects/agent-skills/ascetic-angular-conventions ~/.claude/skills/ascetic-angular-conventions
 ln -s ~/projects/agent-skills/init-project ~/.claude/skills/init-project
 ln -s ~/projects/agent-skills/spdd-canvas ~/.claude/skills/spdd-canvas
 ln -s ~/projects/agent-skills/spdd-implement ~/.claude/skills/spdd-implement

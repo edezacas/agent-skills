@@ -15,7 +15,6 @@ To run evals, load the `evals.json`, execute each prompt against your project (w
 ## Structure
 ```
 angular-conventions/SKILL.md          # Core Angular patterns (auto-triggered)
-ascetic-angular-conventions/SKILL.md     # Team libs: @Type, FormService (auto-triggered)
 init-project/SKILL.md                 # CLAUDE.md creation guide (auto-triggered)
 spdd-canvas/SKILL.md                  # REASONS canvas generator — /spdd-canvas
 spdd-canvas/assets/template-reasons.md
@@ -35,7 +34,6 @@ evals/workspace/                      # gitignored — local eval results go her
 | Skill | When to activate |
 |-------|-----------------|
 | `angular-conventions` | Any Angular file (`.ts`, `.html`, `.scss`) or mention of NgModule, inject(), signal, takeUntilDestroyed, SharedModule |
-| `ascetic-angular-conventions` | Only when `package.json` or import paths contain `@digitalascetic/ngx-form`, `@digitalascetic/ngx-object-transformer`, or `@digitalascetic/ngx-reflection` |
 | `init-project` | Running `/init`, creating or updating a CLAUDE.md file |
 | `spdd-canvas` | User mentions a new feature, asks for a canvas, or requests a structured prompt before coding |
 | `spdd-implement` | User wants to start coding a feature that has a SPDD canvas |

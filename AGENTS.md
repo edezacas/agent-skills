@@ -9,7 +9,6 @@ Shared AI coding skills for the team. Each skill is a directory with a `SKILL.md
 ## Structure
 ```
 angular-conventions/SKILL.md          # Core Angular patterns — triggers automatically
-ascetic-angular-conventions/SKILL.md  # Team libs: @digitalascetic/* — triggers automatically
 init-project/SKILL.md                 # AGENTS.md creation guide — triggers automatically
 spdd-canvas/SKILL.md                  # REASONS canvas generator — /spdd-canvas
 spdd-canvas/assets/template-reasons.md
@@ -27,4 +26,3 @@ evals/workspace/                      # gitignored — local eval results go her
 ## Gotchas
 - `evals/workspace/` is gitignored; eval results stay local
 - `docs/prompts/` canvases with `Status: Draft` or `Status: Confirmed` are works in progress
-- `ascetic-angular-conventions` only activates when `package.json` or imports contain `@digitalascetic/*`
