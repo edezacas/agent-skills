@@ -4,18 +4,102 @@ description: Mandatory Angular conventions. Activate ALWAYS before writing, modi
 license: Apache-2.0
 metadata:
   author: edezacas
-  version: "1.2"
+  version: "1.3"
 ---
 
-# Angular Conventions
+## Standalone Components (REQUIRED)
 
-**Mandatory** conventions. Apply always, even if existing code does not follow them.
+Components are standalone by default. Do NOT set `standalone: true`.
 
-## Modules
+```typescript
+@Component({
+  selector: 'app-user',
+  imports: [CommonModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: `...`
+})
+export class UserComponent {}
+```
 
-**NgModule** structure — never standalone components.
-- **Feature modules** — one per feature
-- **SharedModule** — reusable components, pipes, and directives
+## Input/Output Functions (REQUIRED)
+
+```typescript
+// ✅ ALWAYS: Function-based
+readonly user = input.required<User>();
+readonly disabled = input(false);
+readonly selected = output<User>();
+readonly checked = model(false);  // Two-way binding
+
+// ❌ NEVER: Decorators
+@Input() user: User;
+@Output() selected = new EventEmitter<User>();
+```
+
+## Signals for State (REQUIRED)
+
+Use `signal()` for state, never `BehaviorSubject` in components.
+
+```typescript
+readonly count = signal(0);
+readonly doubled = computed(() => this.count() * 2);
+
+// Update
+this.count.set(5);
+this.count.update(prev => prev + 1);
+
+// Side effects
+effect(() => localStorage.setItem('count', this.count().toString()));
+```
+
+---
+
+## NO Lifecycle Hooks (REQUIRED)
+
+Signals replace lifecycle hooks. Do NOT use `ngOnInit`, `ngOnChanges`, `ngOnDestroy`.
+
+```typescript
+// ❌ NEVER: Lifecycle hooks
+ngOnInit() {
+  this.loadUser();
+}
+
+ngOnChanges(changes: SimpleChanges) {
+  if (changes['userId']) {
+    this.loadUser();
+  }
+}
+
+// ✅ ALWAYS: Signals + effect
+readonly userId = input.required<string>();
+readonly user = signal<User | null>(null);
+
+private userEffect = effect(() => {
+  // Runs automatically when userId() changes
+  this.loadUser(this.userId());
+});
+
+// ✅ For derived data, use computed
+readonly displayName = computed(() => this.user()?.name ?? 'Guest');
+```
+
+### When to Use What
+
+| Need | Use |
+|------|-----|
+| React to input changes | `effect()` watching the input signal |
+| Derived/computed state | `computed()` |
+| Side effects (API calls, localStorage) | `effect()` |
+| Cleanup on destroy | `DestroyRef` + `inject()` |
+
+```typescript
+// Cleanup example
+private readonly destroyRef = inject(DestroyRef);
+
+constructor() {
+  const subscription = someObservable$.subscribe();
+  this.destroyRef.onDestroy(() => subscription.unsubscribe());
+}
+```
 
 ## Dependency Injection
 
@@ -29,17 +113,6 @@ private clientService = inject(ClientService);
 constructor(private clientService: ClientService) {}
 ```
 
-## Local State
-
-Use `signal()` for local state, never `BehaviorSubject` in components.
-
-```typescript
-// ✅
-clients = signal<Client[]>([]);
-
-// ❌
-clients$ = new BehaviorSubject<Client[]>([]);
-```
 
 ## Subscriptions
 
@@ -61,4 +134,8 @@ Use `@if`, `@for`, `@switch` — never `*ngIf`, `*ngFor`, `*ngSwitch`.
 - Use `@empty` inside `@for` for the zero-items case.
 - Prefer `as` in `@if` to avoid re-evaluating expensive expressions.
 
-Reference: https://angular.dev/guide/templates/control-flow
+## Resources
+
+- https://angular.dev/guide/signals
+- https://angular.dev/guide/templates/control-flow
+- https://angular.dev/guide/zoneless
