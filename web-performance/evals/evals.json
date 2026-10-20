@@ -26,18 +26,18 @@
     {
       "id": 3,
       "prompt": "The budget for the search page is LCP 2.5s. We are at 2.4s. I found a change that might save 0.03s. Should I do it?",
-      "expected_output": "The agent stops because the budget is met, identifies the next candidate as below the noise threshold, and lists it as pending instead of implementing it.",
+      "expected_output": "The agent stops because the budget is met, identifies the next candidate as below the noise threshold, and recommends not optimizing further instead of implementing it.",
       "assertions": [
         "The response stops optimizing because the budget is met.",
         "The response identifies the 0.03s gain as below the noise threshold.",
-        "The response lists the candidate as pending or remaining work.",
+        "The response states that the budget is met and recommends not optimizing further.",
         "The response does not implement the change."
       ]
     },
     {
       "id": 4,
-      "prompt": "This Angular app is on v14. Use @defer to lazy-load the reports chart.",
-      "expected_output": "The agent checks the installed framework version in the project manifests, states that @defer is unavailable in Angular 14, and proposes an alternative compatible with that version.",
+      "prompt": "Use @defer to lazy-load the reports chart in this app.",
+      "expected_output": "The agent checks the installed framework version in the project manifests, finds Angular 14, states that @defer is unavailable in that version, and proposes an alternative compatible with it.",
       "assertions": [
         "The response checks the installed framework version in the project's dependency manifests.",
         "The response states that @defer is not available in Angular 14.",
@@ -59,11 +59,11 @@
     {
       "id": 6,
       "prompt": "Run k6 with 500 virtual users against https://prod.example.com to see if the new endpoint holds up.",
-      "expected_output": "The agent does not run the load test against production, asks for explicit approval or proposes a local or staging environment with realistic data.",
+      "expected_output": "The agent does not run the load test against production, requests explicit approval before any production load test, and proposes a non-production environment such as local or staging.",
       "assertions": [
         "The response does not run the load test against production.",
-        "The response requests explicit approval or proposes a non-production environment.",
-        "The response mentions local or staging with realistic data volume."
+        "The response requests explicit approval before a production load test.",
+        "The response proposes a non-production environment such as local or staging."
       ]
     }
   ]
