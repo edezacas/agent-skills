@@ -8,6 +8,7 @@ edezacas shared AI skills in the [agentskills.io](https://agentskills.io) format
 |---|---|---|
 | `angular-conventions` | automatic | Core Angular conventions: `inject()`, signals, `takeUntilDestroyed`, NgModule |
 | `init-project` | automatic | Guide for creating and editing `CLAUDE.md` in any project |
+| `web-performance` | automatic | Measure-first web performance loop: renders, bundle, requests and caching, slow queries and N+1, images/fonts/scripts |
 
 > Looking for the SPDD skills (`spdd-canvas`, `spdd-design`, `spdd-implement`, `spdd-verify`, `spdd-sync`, `spdd-migrate`)? They moved to [edezacas/open-spdd](https://github.com/edezacas/open-spdd).
 
@@ -27,6 +28,7 @@ git clone git@github.com:edezacas/agent-skills.git ~/projects/agent-skills
 mkdir -p ~/.claude/skills
 ln -s ~/projects/agent-skills/angular-conventions ~/.claude/skills/angular-conventions
 ln -s ~/projects/agent-skills/init-project ~/.claude/skills/init-project
+ln -s ~/projects/agent-skills/web-performance ~/.claude/skills/web-performance
 ```
 
 </details>

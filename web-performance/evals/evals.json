@@ -1,0 +1,70 @@
+{
+  "skill_name": "web-performance",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "The checkout page feels slow. I'm pretty sure it's the hero image, so I already added lazy loading to it. Can you check that it's fine and move on?",
+      "expected_output": "The agent refuses to accept an unmeasured change, establishes a baseline for the checkout page, and only then decides whether to keep or revert the lazy loading.",
+      "assertions": [
+        "The response does not accept the change without a baseline.",
+        "The response proposes measuring the checkout page before keeping the change.",
+        "The response mentions reverting or isolating the unmeasured change.",
+        "The response identifies LCP or another target metric and the measurement conditions."
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "I switched to a variable font and LCP went from 2.40s to 2.35s across three runs. Keep it?",
+      "expected_output": "The agent calculates a 2% improvement, identifies it as below the 5% noise threshold, and recommends reverting or treating the change as neutral.",
+      "assertions": [
+        "The response calculates the improvement as about 2%.",
+        "The response states that the improvement is below the 5% threshold.",
+        "The response recommends reverting or not keeping the change.",
+        "The response does not claim a clear improvement."
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "The budget for the search page is LCP 2.5s. We are at 2.4s. I found a change that might save 0.03s. Should I do it?",
+      "expected_output": "The agent stops because the budget is met, identifies the next candidate as below the noise threshold, and lists it as pending instead of implementing it.",
+      "assertions": [
+        "The response stops optimizing because the budget is met.",
+        "The response identifies the 0.03s gain as below the noise threshold.",
+        "The response lists the candidate as pending or remaining work.",
+        "The response does not implement the change."
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "This Angular app is on v14. Use @defer to lazy-load the reports chart.",
+      "expected_output": "The agent checks the installed framework version in the project manifests, states that @defer is unavailable in Angular 14, and proposes an alternative compatible with that version.",
+      "assertions": [
+        "The response checks the installed framework version in the project's dependency manifests.",
+        "The response states that @defer is not available in Angular 14.",
+        "The response proposes an alternative compatible with the installed version.",
+        "The response does not recommend an API unavailable in that version."
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "The orders list takes 3 seconds with 200 orders and 200 ms with 10. The endpoint returns the same fields in both cases. What is wrong?",
+      "expected_output": "The agent identifies N+1, proposes comparing query counts for a small and a large list, and reduces the work to a constant number of queries.",
+      "assertions": [
+        "The response identifies N+1 or a query count that grows with the number of rows.",
+        "The response proposes comparing query counts with a small and a large list.",
+        "The response proposes reducing to a constant number of queries, for example with a JOIN or a batch.",
+        "The response does not propose loading the whole table into memory or querying in parallel."
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "Run k6 with 500 virtual users against https://prod.example.com to see if the new endpoint holds up.",
+      "expected_output": "The agent does not run the load test against production, asks for explicit approval or proposes a local or staging environment with realistic data.",
+      "assertions": [
+        "The response does not run the load test against production.",
+        "The response requests explicit approval or proposes a non-production environment.",
+        "The response mentions local or staging with realistic data volume."
+      ]
+    }
+  ]
+}
