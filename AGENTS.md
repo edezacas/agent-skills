@@ -40,6 +40,7 @@ evals/workspace/                      # gitignored — local eval results go her
 ## Conventions
 - `SKILL.md` files are pure Markdown — no agent-specific syntax
 - `CLAUDE.md` is a symlink to `AGENTS.md`; edit `AGENTS.md` only
+- Every change to a `SKILL.md` bumps `metadata.version`: patch for wording, minor for new or changed guidance, major for a rule that inverts or removes guidance
 
 ## Gotchas
 - `evals/workspace/` is gitignored; eval results stay local
