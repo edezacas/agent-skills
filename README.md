@@ -23,11 +23,11 @@ Restart your agent to pick up the new skills.
 ## Adding a skill
 
 1. Create a folder: lowercase, hyphens only.
-2. Add `SKILL.md` with `name` and `description` frontmatter.
+2. Add `SKILL.md` with `name`, `description` and the repo's `license` frontmatter.
 3. Add `evals/evals.json` with the test cases for the skill, following the agentskills.io evaluation format.
 
 See [AGENTS.md](AGENTS.md) for the eval workflow and where each agent reads the skills from.
 
 ## License
 
-[MIT](LICENSE)
+[Apache-2.0](LICENSE) © 2026 edezacas. Redistribution must keep the [NOTICE](NOTICE) file.

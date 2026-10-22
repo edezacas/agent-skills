@@ -41,6 +41,7 @@ evals/workspace/                      # gitignored — local eval results go her
 - `SKILL.md` files are pure Markdown — no agent-specific syntax
 - `CLAUDE.md` is a symlink to `AGENTS.md`; edit `AGENTS.md` only
 - Every change to a `SKILL.md` bumps `metadata.version`: patch for wording, minor for new or changed guidance, major for a rule that inverts or removes guidance
+- The `license` frontmatter of every `SKILL.md` matches `LICENSE` (Apache-2.0); attribution changes go in `NOTICE`, and reusing the content means keeping both files
 
 ## Gotchas
 - `evals/workspace/` is gitignored; eval results stay local
