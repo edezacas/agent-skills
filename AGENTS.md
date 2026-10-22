@@ -15,13 +15,17 @@ To run evals, load the `evals.json`, execute each prompt against your project (w
 ## Structure
 ```
 angular-conventions/SKILL.md          # Core Angular patterns — triggers automatically
+angular-conventions/evals/evals.json  # convention violation cases
+code-design/SKILL.md                  # Architecture judgement, no over-engineering — triggers automatically
+code-design/evals/evals.json          # over-engineering guardrail cases
 init-project/SKILL.md                 # AGENTS.md creation guide — triggers automatically
+init-project/evals/evals.json         # bloated/section-mixing guardrail cases
+tdd/SKILL.md                          # Red → green loop and test quality — triggers automatically
+tdd/evals/evals.json                  # test quality guardrail cases
 web-performance/SKILL.md              # Measure-first perf loop, auto-triggered
 web-performance/evals/evals.json      # method and guardrail eval cases
 evals/workspace/                      # gitignored — local eval results go here
 ```
-
-> SPDD skills (`spdd-canvas`, `spdd-design`, `spdd-implement`, `spdd-verify`, `spdd-sync`, `spdd-migrate`) moved to [edezacas/open-spdd](https://github.com/edezacas/open-spdd).
 
 ## Conventions
 - `SKILL.md` files are pure Markdown — no agent-specific syntax

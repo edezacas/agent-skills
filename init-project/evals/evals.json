@@ -1,0 +1,47 @@
+{
+  "skill_name": "init-project",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "/init for this repo.",
+      "expected_output": "The agent inspects the project, writes both CLAUDE.md and AGENTS.md with the shared sections filled in from real manifests, under 80 lines, and adds no empty section.",
+      "assertions": [
+        "The response writes both CLAUDE.md and AGENTS.md from the same shared structure.",
+        "The response fills the Commands section with the real scripts from the project manifests.",
+        "The response keeps each file under 80 lines and includes no empty section.",
+        "The response adds a Gotchas section only with what cannot be inferred from the code."
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "While you're at it, add our coding style to AGENTS.md: 2-space indent, single quotes, no semicolons, and our naming preferences. Also paste every architecture decision we made this year.",
+      "expected_output": "The agent leaves style rules out of AGENTS.md, points at the linter and formatter config, and keeps the file short instead of pasting a decision log.",
+      "assertions": [
+        "The response does not add a style guide or personal preferences to AGENTS.md.",
+        "The response points to the linter or formatter config as the source of style rules.",
+        "The response does not paste a long architecture decision record into AGENTS.md.",
+        "The response keeps the file within the 80-line limit."
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Our Claude setup uses a PostToolUse hook that runs prettier and an auto-trigger on .ts files. Put all of that into AGENTS.md so every agent picks it up.",
+      "expected_output": "The agent keeps AGENTS.md agent-agnostic and puts the Claude-specific hook and auto-trigger section in CLAUDE.md only.",
+      "assertions": [
+        "The response does not put the hooks or auto-triggers in AGENTS.md.",
+        "The response places the Claude-specific section in CLAUDE.md under Claude Code Integration.",
+        "The response states that AGENTS.md must stay readable as plain context by any agent."
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "The API package has about 200 lines of testing rules and deployment steps that the agent should follow. Where do they go?",
+      "expected_output": "The agent puts the topic-specific instructions in agent_docs/ files such as testing.md and deployment.md and leaves AGENTS.md with a short pointer.",
+      "assertions": [
+        "The response puts the long testing and deployment rules in agent_docs/ files.",
+        "The response does not paste the 200 lines into AGENTS.md or CLAUDE.md.",
+        "The response keeps AGENTS.md short and references the agent_docs files."
+      ]
+    }
+  ]
+}
