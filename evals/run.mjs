@@ -18,7 +18,7 @@
 //   node evals/run.mjs --jobs 1 --iteration 3
 
 import { spawn } from 'node:child_process';
-import { mkdir, cp, writeFile, readFile, readdir, stat } from 'node:fs/promises';
+import { mkdir, cp, writeFile, readFile, readdir, rm } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import path from 'node:path';
 
@@ -102,9 +102,12 @@ function summarize(events) {
   return { text, turns, tokens };
 }
 
+const SKIP_DIRS = new Set(['node_modules', '.git', 'dist', '.angular', 'coverage']);
+
 async function walk(dir, base = dir) {
   const out = [];
   for (const entry of await readdir(dir, { withFileTypes: true })) {
+    if (SKIP_DIRS.has(entry.name)) continue;
     const full = path.join(dir, entry.name);
     if (entry.isDirectory()) out.push(...(await walk(full, base)));
     else out.push({ full, rel: path.relative(base, full) });
@@ -148,6 +151,7 @@ async function collectOutputs(workdir, outputsDir, expected) {
   for (const { full, rel } of await walk(workdir)) {
     const content = await readFile(full, 'utf8');
     if (expected.get(rel) === content) continue;
+    if (content.length > 200_000) continue;
     const target = path.join(outputsDir, rel);
     await mkdir(path.dirname(target), { recursive: true });
     await writeFile(target, content);
@@ -397,6 +401,8 @@ async function runCase(skill, testCase, itDir) {
     await writeFile(path.join(dir, 'transcript.md'), text + '\n');
     await writeFile(path.join(dir, 'timing.json'), JSON.stringify(timing, null, 2) + '\n');
     const files = await collectOutputs(workdir, outputsDir, expected);
+    // The agent may npm-install into workdir; keep only outputs/ after grading.
+    await rm(workdir, { recursive: true, force: true });
 
     const grading = await gradeCase(testCase, config, text, files, dir);
     runs.push({ skill: skill.name, id: testCase.id, config: name, timing, grading });
