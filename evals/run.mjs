@@ -161,8 +161,12 @@ async function copyCaseFiles(testCase, workdir, skillDir, expected) {
   for (const file of testCase.files ?? []) {
     const source = path.join(skillDir, file);
     if (!existsSync(source)) throw new Error(`missing eval file: ${file}`);
-    const rel = path.basename(file);
-    await cp(source, path.join(workdir, rel), { force: true });
+    // evals/files/src/user.ts lands at src/user.ts, so a case can supply files
+    // where the prompt expects them.
+    const rel = file.includes('/files/') ? file.slice(file.indexOf('/files/') + 7) : path.basename(file);
+    const target = path.join(workdir, rel);
+    await mkdir(path.dirname(target), { recursive: true });
+    await cp(source, target, { force: true });
     expected.set(rel, await readFile(source, 'utf8'));
   }
 }

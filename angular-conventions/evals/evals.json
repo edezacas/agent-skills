@@ -14,12 +14,12 @@
     },
     {
       "id": 2,
-      "prompt": "This component gets a userId input and has to load the user from UserService every time the id changes. Add that.",
-      "expected_output": "The agent watches the input signal with an effect instead of using ngOnInit or ngOnChanges, and cleans up the subscription with takeUntilDestroyed.",
+      "prompt": "This component gets a userId input and has to load the user from UserService every time the id changes. It also streams live updates from UserService.watch() and must stop listening when the component is destroyed. Add all of that.",
+      "expected_output": "The agent watches the input signal with an effect instead of using ngOnInit or ngOnChanges, and ends the watch() subscription with takeUntilDestroyed and a DestroyRef.",
       "assertions": [
         { "text": "The response does not add ngOnInit or ngOnChanges.", "guardrail": true },
         "The response reacts to the input change with an effect() on the input signal.",
-        "The response cleans up the subscription with takeUntilDestroyed and a DestroyRef, not ngOnDestroy."
+        "The response ends the watch() subscription with takeUntilDestroyed and a DestroyRef, not ngOnDestroy."
       ]
     },
     {

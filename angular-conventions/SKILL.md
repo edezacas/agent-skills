@@ -4,7 +4,7 @@ description: Mandatory Angular conventions. Activate ALWAYS before writing, modi
 license: Apache-2.0
 metadata:
   author: edezacas
-  version: "1.3"
+  version: "1.4"
 ---
 
 ## Standalone Components (REQUIRED)
@@ -89,7 +89,8 @@ readonly displayName = computed(() => this.user()?.name ?? 'Guest');
 | React to input changes | `effect()` watching the input signal |
 | Derived/computed state | `computed()` |
 | Side effects (API calls, localStorage) | `effect()` |
-| Cleanup on destroy | `DestroyRef` + `inject()` |
+| A subscription that outlives one run | `takeUntilDestroyed()` on the component `DestroyRef` |
+| Cleanup inside one effect run | the `onCleanup` callback the effect gives you |
 
 ```typescript
 // Cleanup example
@@ -116,7 +117,7 @@ constructor(private clientService: ClientService) {}
 
 ## Subscriptions
 
-Always use `takeUntilDestroyed()`, never `ngOnDestroy` + `Subject`.
+A subscription belongs to the component, not to one run of a function: always end it with `takeUntilDestroyed()`, never `ngOnDestroy` + `Subject`.
 
 ```typescript
 private destroyRef = inject(DestroyRef);
@@ -124,6 +125,15 @@ private destroyRef = inject(DestroyRef);
 this.myService.getData()
   .pipe(takeUntilDestroyed(this.destroyRef))
   .subscribe(data => this.data.set(data));
+```
+
+Only when the subscription *is* the effect run do you clean it up with the effect's own `onCleanup`, because that subscription ends with the run:
+
+```typescript
+private streamEffect = effect((onCleanup) => {
+  const sub = this.myService.watch(this.userId()).subscribe(u => this.user.set(u));
+  onCleanup(() => sub.unsubscribe());
+});
 ```
 
 ## Control Flow

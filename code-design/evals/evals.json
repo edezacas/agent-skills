@@ -4,6 +4,7 @@
     {
       "id": 1,
       "prompt": "Add a retryCount option to fetchUser. I was thinking of a RetryPolicy interface and a factory so we can add strategies later.",
+      "files": ["evals/files/src/user.ts"],
       "expected_output": "The agent adds the option with the smallest change, states that one implementation does not justify an interface or a factory, and makes the code work for the case at hand.",
       "assertions": [
         "The response implements the option without adding an interface, a factory or a strategy class.",
@@ -14,6 +15,7 @@
     {
       "id": 2,
       "prompt": "The upload progress line needs a human readable size, like 1.5 MB for 1572864 bytes. Add a helper.",
+      "files": ["evals/files/src/format.ts"],
       "expected_output": "The agent finds the existing bytes formatter, reuses it, and writes no second implementation.",
       "assertions": [
         "The response looks for existing code before writing a new helper.",
