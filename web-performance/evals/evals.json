@@ -37,6 +37,7 @@
     {
       "id": 4,
       "prompt": "Use @defer to lazy-load the reports chart in this app.",
+      "files": ["evals/files/package.json"],
       "expected_output": "The agent checks the installed framework version in the project manifests, finds Angular 14, states that @defer is unavailable in that version, and proposes an alternative compatible with it.",
       "assertions": [
         "The response checks the installed framework version in the project's dependency manifests.",

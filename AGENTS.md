@@ -10,7 +10,16 @@ edezacas shared AI coding skills. Each skill is a directory with a `SKILL.md` fi
 
 Each skill can have an `evals/evals.json` following the [agentskills.io evaluation format](https://agentskills.io/skill-creation/evaluating-skills). The file defines test cases with prompts, expected outputs, and verifiable assertions.
 
-To run evals, load the `evals.json`, execute each prompt against your project (with and without the skill), grade the assertions, and record results in `evals/workspace/` (gitignored). See the agentskills.io docs for the full workspace structure and grading format.
+To run evals, use `node evals/run.mjs` (no dependencies). Each case runs twice through `pi -p` — with the skill and without it — so the baseline shows what the skill actually adds; the output is graded against the assertions and results land in `evals/workspace/iteration-N/` (gitignored): `transcript.md`, `timing.json`, `grading.json` and `grading_raw.md` per run, plus `benchmark.json` per iteration.
+
+```bash
+node evals/run.mjs                            # every skill, both configs
+node evals/run.mjs --only tdd --cases 1       # smoke test
+node evals/run.mjs --jobs 1 --iteration 5     # serial, fixed iteration
+node evals/run.mjs --regrade --iteration 5    # re-grade without re-running
+```
+
+A case can declare `files` (paths relative to the skill, copied into the workdir by basename) to give the agent something to read.
 
 ## Agents
 
@@ -34,6 +43,7 @@ tdd/SKILL.md                          # Red → green loop and test quality — 
 tdd/evals/evals.json                  # test quality guardrail cases
 web-performance/SKILL.md              # Measure-first perf loop, auto-triggered
 web-performance/evals/evals.json      # method and guardrail eval cases
+evals/run.mjs                         # eval runner — with/without skill, grading, benchmark
 evals/workspace/                      # gitignored — local eval results go here
 ```
 
@@ -45,3 +55,5 @@ evals/workspace/                      # gitignored — local eval results go her
 
 ## Gotchas
 - `evals/workspace/` is gitignored; eval results stay local
+- One run per case is noisy: the same assertion can flip between iterations, so repeat before trusting a small delta
+- `pi -p` needs stdin closed or it hangs; the runner handles this
