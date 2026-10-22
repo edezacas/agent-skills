@@ -4,7 +4,7 @@ description: Guidelines for creating or editing CLAUDE.md and AGENTS.md for a pr
 license: Apache-2.0
 metadata:
   author: edezacas
-  version: "1.0"
+  version: "1.1"
 ---
 
 # Project Agent Configuration Guidelines
@@ -12,7 +12,7 @@ metadata:
 Two files, same purpose — give the agent context about the project:
 
 - **`CLAUDE.md`** — read by Claude Code. May include Claude-specific sections (hooks, auto-triggers, tool permissions).
-- **`AGENTS.md`** — read by OpenAI Codex and other compatible agents. Pure context, no agent-specific syntax.
+- **`AGENTS.md`** — read by Codex, pi, opencode and other compatible agents. Pure context, no agent-specific syntax.
 
 When both files are needed, generate them together. They share the same core content; only the Claude-specific sections differ.
 

@@ -6,7 +6,7 @@ edezacas shared AI skills in the [agentskills.io](https://agentskills.io) format
 
 | Skill | Trigger | Description |
 |---|---|---|
-| `angular-conventions` | automatic | Core Angular conventions: `inject()`, signals, `takeUntilDestroyed`, NgModule |
+| `angular-conventions` | automatic | Core Angular conventions: standalone components, `input()`/`output()`, signals, `inject()`, `takeUntilDestroyed`, `@if`/`@for` |
 | `code-design` | automatic | A few clean-code rules for software architecture, to avoid over-engineering |
 | `init-project` | automatic | Guide for creating and editing `CLAUDE.md` and `AGENTS.md` in any project, for any agent |
 | `tdd` | automatic | Test-driven development: the red → green loop, seams, and what makes a test worthless |
