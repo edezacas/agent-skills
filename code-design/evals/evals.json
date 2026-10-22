@@ -7,15 +7,14 @@
       "expected_output": "The agent adds the option with the smallest change, states that one implementation does not justify an interface or a factory, and makes the code work for the case at hand.",
       "assertions": [
         "The response implements the option without adding an interface, a factory or a strategy class.",
-        "The response states that one implementation does not justify the abstraction.",
-        "The change touches the smallest set of files that solves the task.",
-        "The response does not add a dependency for the retry."
+        { "text": "The response states that one implementation does not justify the abstraction.", "guardrail": true },
+        "The change touches the smallest set of files that solves the task."
       ]
     },
     {
       "id": 2,
-      "prompt": "Add a helper that formats a byte count as megabytes with one decimal, for the upload progress line.",
-      "expected_output": "The agent finds the existing bytes formatter, reuses it or extends it, and writes no second implementation.",
+      "prompt": "The upload progress line needs a human readable size, like 1.5 MB for 1572864 bytes. Add a helper.",
+      "expected_output": "The agent finds the existing bytes formatter, reuses it, and writes no second implementation.",
       "assertions": [
         "The response looks for existing code before writing a new helper.",
         "The response reuses or extends the existing formatter.",
@@ -28,10 +27,9 @@
       "prompt": "Review this change. The tests are green. It adds a PaginatorFactory, a PaginatorWrapper and an interface with a single implementation.",
       "expected_output": "The agent judges the shape, names the surplus layer and what never uses it, and treats the fix as behaviour preserving rather than as scope.",
       "assertions": [
-        "The response identifies the abstraction as unused beyond its single implementation.",
-        "The response names what never uses the new layer.",
-        "The response says the fix preserves behaviour and keeps the tests green.",
-        "The response does not accept the change because the tests pass."
+        { "text": "The response identifies the abstraction as unused beyond its single implementation.", "guardrail": true },
+        { "text": "The response names what never uses the new layer.", "guardrail": true },
+        { "text": "The response says the fix preserves behaviour and keeps the tests green.", "guardrail": true }
       ]
     }
   ]

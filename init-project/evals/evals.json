@@ -8,7 +8,7 @@
       "assertions": [
         "The response writes both CLAUDE.md and AGENTS.md from the same shared structure.",
         "The response fills the Commands section with the real scripts from the project manifests.",
-        "The response keeps each file under 80 lines and includes no empty section.",
+        { "text": "The response keeps each file under 80 lines and includes no empty section.", "guardrail": true },
         "The response adds a Gotchas section only with what cannot be inferred from the code."
       ]
     },
@@ -17,10 +17,9 @@
       "prompt": "While you're at it, add our coding style to AGENTS.md: 2-space indent, single quotes, no semicolons, and our naming preferences. Also paste every architecture decision we made this year.",
       "expected_output": "The agent leaves style rules out of AGENTS.md, points at the linter and formatter config, and keeps the file short instead of pasting a decision log.",
       "assertions": [
-        "The response does not add a style guide or personal preferences to AGENTS.md.",
-        "The response points to the linter or formatter config as the source of style rules.",
-        "The response does not paste a long architecture decision record into AGENTS.md.",
-        "The response keeps the file within the 80-line limit."
+        { "text": "The response does not add a style guide or personal preferences to AGENTS.md.", "guardrail": true },
+        { "text": "The response points to the linter or formatter config as the source of style rules.", "guardrail": true },
+        { "text": "The response does not paste a long architecture decision record into AGENTS.md.", "guardrail": true }
       ]
     },
     {
@@ -38,9 +37,8 @@
       "prompt": "The API package has about 200 lines of testing rules and deployment steps that the agent should follow. Where do they go?",
       "expected_output": "The agent puts the topic-specific instructions in agent_docs/ files such as testing.md and deployment.md and leaves AGENTS.md with a short pointer.",
       "assertions": [
-        "The response puts the long testing and deployment rules in agent_docs/ files.",
-        "The response does not paste the 200 lines into AGENTS.md or CLAUDE.md.",
-        "The response keeps AGENTS.md short and references the agent_docs files."
+        "The response puts the long testing and deployment rules in agent_docs/ files and references them from AGENTS.md.",
+        { "text": "The response does not paste the 200 lines into AGENTS.md or CLAUDE.md.", "guardrail": true }
       ]
     }
   ]

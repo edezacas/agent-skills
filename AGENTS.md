@@ -21,6 +21,8 @@ node evals/run.mjs --regrade --iteration 5    # re-grade without re-running
 
 A case can declare `files` (paths relative to the skill, copied into the workdir by basename) to give the agent something to read.
 
+An assertion is a string, or `{ "text": "...", "guardrail": true }`. Use `guardrail` for a rule the current model already follows and that should never regress — the point of the case is elsewhere. `benchmark.json` reports the two apart: `skill_signal` (assertions that can fail because of the skill) and `guardrail` (expected at 1.0). A guardrail assertion that starts failing is a real regression, not a signal.
+
 ## Agents
 
 Skills follow the agentskills.io format (`SKILL.md` + standard frontmatter), so the same folders work everywhere. `npx skills add edezacas/agent-skills` symlinks them into every detected agent. To place them by hand, use the agent's skills directory:

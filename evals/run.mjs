@@ -169,6 +169,12 @@ async function copyCaseFiles(testCase, workdir, skillDir, expected) {
 
 // -------------------------------------------------------------- grading
 
+// An assertion is either a string or { text, guardrail: true }. Guardrails encode a
+// rule the current model already follows; they are reported apart from the
+// assertions that can actually fail because of the skill.
+const assertionText = (a) => (typeof a === 'string' ? a : a.text);
+const isGuardrail = (a) => typeof a === 'object' && a.guardrail === true;
+
 function gradingPrompt(testCase, response, files) {
   const fileBlock = files.length
     ? files
@@ -188,7 +194,7 @@ function gradingPrompt(testCase, response, files) {
     `FILES THE AGENT CREATED OR MODIFIED, WITH THEIR CONTENT:\n${fileBlock}`,
     '',
     'ASSERTIONS:',
-    ...testCase.assertions.map((a, i) => `${i + 1}. ${a}`),
+    ...testCase.assertions.map((a, i) => `${i + 1}. ${assertionText(a)}`),
     '',
     'Rules: a PASS needs concrete evidence quoted from the response or from a file.',
     'If the evidence is missing, ambiguous, or only implied, it is a FAIL. Do not give',
@@ -212,8 +218,11 @@ function parseGrading(raw) {
   }
 }
 
-function summarizeGrading(grading) {
+function summarizeGrading(grading, testCase) {
   const results = grading?.assertion_results ?? [];
+  const guardrailTexts = new Set((testCase?.assertions ?? []).filter(isGuardrail).map(assertionText));
+  const signal = results.filter((r) => !guardrailTexts.has(r.text));
+  const guardrail = results.filter((r) => guardrailTexts.has(r.text));
   const passed = results.filter((r) => r.passed).length;
   return {
     assertion_results: results,
@@ -222,6 +231,14 @@ function summarizeGrading(grading) {
       failed: results.length - passed,
       total: results.length,
       pass_rate: results.length ? passed / results.length : 0,
+      skill_signal: {
+        passed: signal.filter((r) => r.passed).length,
+        total: signal.length,
+      },
+      guardrail: {
+        passed: guardrail.filter((r) => r.passed).length,
+        total: guardrail.length,
+      },
     },
   };
 }
@@ -248,7 +265,29 @@ function configStats(runs) {
       passed: runs.reduce((n, r) => n + (r.grading?.summary.passed ?? 0), 0),
       total: runs.reduce((n, r) => n + (r.grading?.summary.total ?? 0), 0),
     },
+    skill_signal: {
+      pass_rate: rate(
+        runs.map((r) => r.grading?.summary.skill_signal?.passed ?? 0),
+        runs.map((r) => r.grading?.summary.skill_signal?.total ?? 0),
+      ),
+      passed: runs.reduce((n, r) => n + (r.grading?.summary.skill_signal?.passed ?? 0), 0),
+      total: runs.reduce((n, r) => n + (r.grading?.summary.skill_signal?.total ?? 0), 0),
+    },
+    guardrail: {
+      pass_rate: rate(
+        runs.map((r) => r.grading?.summary.guardrail?.passed ?? 0),
+        runs.map((r) => r.grading?.summary.guardrail?.total ?? 0),
+      ),
+      passed: runs.reduce((n, r) => n + (r.grading?.summary.guardrail?.passed ?? 0), 0),
+      total: runs.reduce((n, r) => n + (r.grading?.summary.guardrail?.total ?? 0), 0),
+    },
   };
+}
+
+// Pass rate over a set of runs, weighted by assertions (not by run).
+function rate(passed, total) {
+  const t = total.reduce((a, b) => a + b, 0);
+  return +((t ? passed.reduce((a, b) => a + b, 0) / t : 0)).toFixed(3);
 }
 
 function benchmark(runs) {
@@ -263,6 +302,7 @@ function benchmark(runs) {
       without_skill: wo,
       delta: {
         pass_rate: +(w.pass_rate.mean - wo.pass_rate.mean).toFixed(3),
+        skill_signal: +(w.skill_signal.pass_rate - wo.skill_signal.pass_rate).toFixed(3),
         time_seconds: +(w.time_seconds.mean - wo.time_seconds.mean).toFixed(1),
         tokens: w.tokens.mean - wo.tokens.mean,
       },
@@ -307,8 +347,12 @@ async function gradeCase(testCase, config, response, files, dir) {
 
   await writeFile(path.join(dir, 'grading_raw.md'), raw + '\n');
   const grading = parsed?.assertion_results?.length
-    ? summarizeGrading(parsed)
-    : { assertion_results: [], summary: { passed: 0, failed: 0, total: 0, pass_rate: 0 }, error: 'unparseable' };
+    ? summarizeGrading(parsed, testCase)
+    : {
+        assertion_results: [],
+        summary: { passed: 0, failed: 0, total: 0, pass_rate: 0, skill_signal: { passed: 0, total: 0 }, guardrail: { passed: 0, total: 0 } },
+        error: 'unparseable',
+      };
   await writeFile(path.join(dir, 'grading.json'), JSON.stringify(grading, null, 2) + '\n');
   return grading;
 }

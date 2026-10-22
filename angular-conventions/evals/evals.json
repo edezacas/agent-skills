@@ -6,10 +6,10 @@
       "prompt": "Create a user-card component that shows a user's name and email and emits a selected event when clicked.",
       "expected_output": "The agent writes a standalone component with function-based input and output, OnPush change detection, no decorators and no NgModule.",
       "assertions": [
-        "The component uses input.required() or input() instead of an @Input decorator.",
-        "The component uses output() instead of an @Output decorator and EventEmitter.",
-        "The component does not set standalone: true and does not declare the component in an NgModule.",
-        "The component sets ChangeDetectionStrategy.OnPush."
+        { "text": "The component uses input.required() or input() instead of an @Input decorator.", "guardrail": true },
+        { "text": "The component uses output() instead of an @Output decorator and EventEmitter.", "guardrail": true },
+        { "text": "The component does not set standalone: true and does not declare the component in an NgModule.", "guardrail": true },
+        { "text": "The component sets ChangeDetectionStrategy.OnPush.", "guardrail": true }
       ]
     },
     {
@@ -17,10 +17,9 @@
       "prompt": "This component gets a userId input and has to load the user from UserService every time the id changes. Add that.",
       "expected_output": "The agent watches the input signal with an effect instead of using ngOnInit or ngOnChanges, and cleans up the subscription with takeUntilDestroyed.",
       "assertions": [
-        "The response does not add ngOnInit or ngOnChanges.",
+        { "text": "The response does not add ngOnInit or ngOnChanges.", "guardrail": true },
         "The response reacts to the input change with an effect() on the input signal.",
-        "The response cleans up the subscription with takeUntilDestroyed and a DestroyRef, not ngOnDestroy.",
-        "The response does not add a Subject-based takeUntil pattern."
+        "The response cleans up the subscription with takeUntilDestroyed and a DestroyRef, not ngOnDestroy."
       ]
     },
     {
@@ -28,10 +27,10 @@
       "prompt": "Render the orders list. Show a total only when there are orders, and show an empty state when there are none.",
       "expected_output": "The agent uses @for with a track on a unique property, @empty for the zero-items case, and @if for the conditional total.",
       "assertions": [
-        "The template uses @for instead of *ngFor.",
-        "The @for block has a track expression on a unique property such as track order.id.",
+        { "text": "The template uses @for instead of *ngFor.", "guardrail": true },
+        { "text": "The @for block has a track expression on a unique property such as track order.id.", "guardrail": true },
         "The template uses @empty for the zero-items case.",
-        "The template uses @if instead of *ngIf for the conditional total."
+        { "text": "The template uses @if instead of *ngIf for the conditional total.", "guardrail": true }
       ]
     },
     {
@@ -42,7 +41,7 @@
         "The response replaces constructor injection with inject().",
         "The response replaces the @Input and @Output decorators with input() and output().",
         "The response replaces *ngFor with @for and requires a track.",
-        "The response does not approve the component as it is."
+        "The response does not argue that the flagged patterns are still acceptable."
       ]
     }
   ]

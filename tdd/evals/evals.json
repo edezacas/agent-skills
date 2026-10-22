@@ -17,9 +17,8 @@
       "prompt": "Write a test for calculateTotal. It multiplies each item price by its quantity, sums the lines and applies the discount percentage.",
       "expected_output": "The agent writes the test with a fixed input and a literal expected value taken from a worked example, so the assertion cannot pass by construction.",
       "assertions": [
-        "The expected value is a literal or a worked example, not an expression that mirrors the implementation.",
-        "The test passes a known input and asserts a known output.",
-        "The response does not recompute the expected value with the same loop or formula as the code."
+        "The test passes a known input and asserts a known output taken from a worked example, not an expression that mirrors the implementation.",
+        { "text": "The expected value is a literal, and the test does not recompute it with the same loop or formula as the code.", "guardrail": true }
       ]
     },
     {
@@ -29,8 +28,7 @@
       "assertions": [
         "The response does not mock OrderValidator or OrderRepository.",
         "The response isolates the external payment boundary or uses an in-memory test double for it.",
-        "The test asserts the observable result, not that internal methods were called.",
-        "The response does not assert on call counts or call order of internal collaborators."
+        "The test asserts the observable result, not that internal methods were called, and does not assert on call counts or call order of internal collaborators."
       ]
     }
   ]
