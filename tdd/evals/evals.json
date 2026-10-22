@@ -1,0 +1,37 @@
+{
+  "skill_name": "tdd",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Write the tests for the pricing module first, then I'll implement it. Cover the discount tiers, the tax rounding and the currency conversion.",
+      "expected_output": "The agent declines to write a batch of tests ahead of the code, starts with one failing test at a seam, and only adds the next test after an implementation makes the first one pass.",
+      "assertions": [
+        "The response does not write tests for several behaviours before any implementation exists.",
+        "The response proposes one failing test at a time, with an implementation between cycles.",
+        "The response names the public interface or seam the first test targets.",
+        "The response gives a reason for not writing the tests in bulk."
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Write a test for calculateTotal. It multiplies each item price by its quantity, sums the lines and applies the discount percentage.",
+      "expected_output": "The agent writes the test with a fixed input and a literal expected value taken from a worked example, so the assertion cannot pass by construction.",
+      "assertions": [
+        "The expected value is a literal or a worked example, not an expression that mirrors the implementation.",
+        "The test passes a known input and asserts a known output.",
+        "The response does not recompute the expected value with the same loop or formula as the code."
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Write a test for OrderService.place. It validates with OrderValidator, saves with OrderRepository and charges with StripeClient.",
+      "expected_output": "The agent tests through the service interface, keeps the validator and repository real or in memory, and isolates only the external payment boundary.",
+      "assertions": [
+        "The response does not mock OrderValidator or OrderRepository.",
+        "The response isolates the external payment boundary or uses an in-memory test double for it.",
+        "The test asserts the observable result, not that internal methods were called.",
+        "The response does not assert on call counts or call order of internal collaborators."
+      ]
+    }
+  ]
+}
