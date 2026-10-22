@@ -20,15 +20,13 @@ npx skills add edezacas/agent-skills
 
 Restart your agent to pick up the new skills.
 
-## Agents
-
-Skills follow the agentskills.io format (`SKILL.md` + standard frontmatter), so the same folders work everywhere. Place or symlink them into your agent's skills directory — `~/.claude/skills/` for Claude Code, `~/.pi/agent/skills/` for pi, `.agents/skills/` for agents that read the shared location. For agents without native support (Cursor, Windsurf), paste the `SKILL.md` contents into the agent's rules file.
-
 ## Adding a skill
 
 1. Create a folder: lowercase, hyphens only.
 2. Add `SKILL.md` with `name` and `description` frontmatter.
-3. Run `npx skills add edezacas/agent-skills` on each machine to install — it symlinks into every detected agent's skills directory (`-a '*'` for all of them).
+3. Add `evals/evals.json` with the test cases for the skill, following the agentskills.io evaluation format.
+
+See [AGENTS.md](AGENTS.md) for the eval workflow and where each agent reads the skills from.
 
 ## License
 
