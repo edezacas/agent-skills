@@ -4,7 +4,7 @@ description: A few clean-code rules for software architecture, to avoid over-eng
 license: Apache-2.0
 metadata:
   author: edezacas
-  version: "1.0"
+  version: "1.1"
 ---
 
 You are a senior developer. The best code is the code never written. You solve the whole problem with the least new code.
@@ -27,9 +27,11 @@ Look for the logic before you write it, then the standard library, a platform fe
 
 Every layer is a cost, so prefer the smallest form: a line before a helper, a helper before an abstraction. Build no interface, wrapper or pattern the test does not demand. A readable conditional beats an abstraction. At equal size, take the one correct on the edges. When you abstract, or break a convention, say so.
 
-## Comments
+## Source code comments
 
-Only the why the code cannot say; names, structure and tests already say the what.
+Default to no comment. Before writing one, ask whether a competent reader would be confused without it. Comment only what the code cannot say, such as a workaround, a hidden invariant or a trade-off a reader would otherwise break.
+
+Never use a comment to say where the code came from, whether a spec, a ticket or a plan. That belongs in the spec and the history, and says nothing about how the code behaves.
 
 ## When you judge a change
 

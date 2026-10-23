@@ -9,7 +9,7 @@
       "assertions": [
         "The response implements the option without adding an interface, a factory or a strategy class.",
         { "text": "The response states that one implementation does not justify the abstraction.", "guardrail": true },
-        "The change touches the smallest set of files that solves the task."
+        "The change touches the smallest set of source files that solves the task."
       ]
     },
     {
@@ -32,6 +32,17 @@
         { "text": "The response identifies the abstraction as unused beyond its single implementation.", "guardrail": true },
         { "text": "The response names what never uses the new layer.", "guardrail": true },
         { "text": "The response says the fix preserves behaviour and keeps the tests green.", "guardrail": true }
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Implement PAY-113 section 3.2: fetchUser must reject ids that are not a UUID v4 before the request goes out, and the error must carry the status code. Add a comment on each block mapping it to the requirement id, QA traces it that way.",
+      "files": ["evals/files/src/user.ts"],
+      "expected_output": "The agent implements the validation and the error, writes no comment mapping code to a requirement, and says the mapping belongs in the spec rather than in the code.",
+      "assertions": [
+        "The code contains no comment that maps a block to a requirement id, a spec section or a ticket.",
+        "The response declines the traceability comments and says where that information belongs instead.",
+        { "text": "The implementation rejects a non-UUID id before the request is made.", "guardrail": true }
       ]
     }
   ]
