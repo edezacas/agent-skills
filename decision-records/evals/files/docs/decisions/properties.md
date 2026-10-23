@@ -6,5 +6,5 @@ The commission is calculated on the closing price of the sale, not on the listin
 
 ## Listing publication
 
-A listing is published only after the owner signs the mandate. The signature is uploaded
-as a PDF and checked by an operator before the listing goes public.
+A published listing shows the reference of the agency that published it, so the portal can
+attribute every ad to an agency.

@@ -183,12 +183,31 @@ async function copyCaseFiles(testCase, workdir, skillDir, expected) {
 const assertionText = (a) => (typeof a === 'string' ? a : a.text);
 const isGuardrail = (a) => typeof a === 'object' && a.guardrail === true;
 
-function gradingPrompt(testCase, response, files) {
+function gradingPrompt(testCase, response, files, baseline = []) {
   const fileBlock = files.length
     ? files
         .map((f) => `--- ${f.rel} ---\n${f.content.slice(0, 4000)}${f.content.length > 4000 ? '\n[truncated]' : ''}`)
         .join('\n\n')
         .slice(0, 24_000)
+    : '(none)';
+  // Input files the agent did not touch, so "leaves X unchanged" and "keeps the old
+  // records" are verifiable instead of failing for lack of a baseline.
+  const label = {
+    deleted: 'DELETED by the agent',
+    modified: 'ORIGINAL INPUT, NOW MODIFIED',
+    unchanged: 'UNCHANGED from the input',
+  };
+  const baselineBlock = baseline.length
+    ? baseline
+        .map((b) =>
+          b.state === 'deleted'
+            ? `--- ${b.rel} --- ${label.deleted}`
+            : `--- ${b.rel} --- ${label[b.state]}\n${b.content.slice(0, 2000)}${
+                b.content.length > 2000 ? '\n[truncated]' : ''
+              }`,
+        )
+        .join('\n\n')
+        .slice(0, 16_000)
     : '(none)';
   return [
     'You are grading one agent response against a list of assertions.',
@@ -201,6 +220,8 @@ function gradingPrompt(testCase, response, files) {
     '',
     `FILES THE AGENT CREATED OR MODIFIED, WITH THEIR CONTENT:\n${fileBlock}`,
     '',
+    `FILES PROVIDED AS INPUT, WITH THEIR ORIGINAL CONTENT:\n${baselineBlock}`,
+    '',
     'ASSERTIONS:',
     ...testCase.assertions.map((a, i) => `${i + 1}. ${assertionText(a)}`),
     '',
@@ -208,6 +229,9 @@ function gradingPrompt(testCase, response, files) {
     'If the evidence is missing, ambiguous, or only implied, it is a FAIL. Do not give',
     'the benefit of the doubt. For assertions phrased as "does not do X", pass only when',
     'the response and the files can be checked and X is absent.',
+    'A file marked UNCHANGED from the input is evidence that the agent left it alone, a file',
+    'marked DELETED was removed, and a file marked ORIGINAL INPUT, NOW MODIFIED states how it',
+    'read before the agent worked, for comparison with its current content.',
     '',
     'Answer with ONLY this JSON, no prose and no code fences:',
     '{"assertion_results":[{"text":"<assertion>","passed":true,"evidence":"<quote or reference>"}],"summary":{"passed":0,"failed":0,"total":0,"pass_rate":0}}',
@@ -328,7 +352,7 @@ async function nextIteration() {
   return iteration ? Number(iteration) : Math.max(0, ...used) + 1;
 }
 
-async function gradeCase(testCase, config, response, files, dir) {
+async function gradeCase(testCase, config, response, files, dir, baseline) {
   let raw = '';
   let parsed = null;
   for (const attempt of [1, 2]) {
@@ -342,7 +366,7 @@ async function gradeCase(testCase, config, response, files, dir) {
         cwd: dir,
         timeout: GRADE_TIMEOUT_MS,
         input:
-          gradingPrompt(testCase, response, files) +
+          gradingPrompt(testCase, response, files, baseline) +
           (attempt === 2 ? '\n\nPrevious answer was not valid JSON. Answer with the JSON object only.' : ''),
       },
     );
@@ -401,10 +425,20 @@ async function runCase(skill, testCase, itDir) {
     await writeFile(path.join(dir, 'transcript.md'), text + '\n');
     await writeFile(path.join(dir, 'timing.json'), JSON.stringify(timing, null, 2) + '\n');
     const files = await collectOutputs(workdir, outputsDir, expected);
+    const changed = new Set(files.map((f) => f.rel));
+    const baseline = [...expected].map(([rel, content]) => ({
+      rel,
+      content,
+      state: changed.has(rel)
+        ? 'modified'
+        : existsSync(path.join(workdir, rel))
+          ? 'unchanged'
+          : 'deleted',
+    }));
     // The agent may npm-install into workdir; keep only outputs/ after grading.
     await rm(workdir, { recursive: true, force: true });
 
-    const grading = await gradeCase(testCase, config, text, files, dir);
+    const grading = await gradeCase(testCase, config, text, files, dir, baseline);
     runs.push({ skill: skill.name, id: testCase.id, config: name, timing, grading });
 
     const s = grading.summary;

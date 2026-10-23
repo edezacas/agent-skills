@@ -1,15 +1,23 @@
 ---
 name: tdd
-description: Test-driven development. Use when the user wants to build features or fix bugs test-first, mentions "red-green-refactor", or wants integration tests.
+description: Apply test driven development when planning or implementing features, bug fixes, or behavior changes. Plan the test approach first, then follow red green refactor cycles during implementation.
 license: Apache-2.0
 metadata:
   author: edezacas
-  version: "1.1"
+  version: "1.2"
 ---
 
 # Test-driven development
 
 Red → green, one cycle at a time: the failing test comes first, then only enough code to pass it.
+
+Use it without being asked whenever the work develops or changes behaviour. That covers a feature, a bug fix, a rule or a response that was not there before.
+
+Not for work with no behaviour to change. That covers answering a question, reviewing code without touching it, and an edit that only touches documentation.
+
+## Planning
+
+Before implementing, say what the behaviour is and how a test will observe it. The plan names the seam and the first test, not a set of test files. The rest arrives one cycle at a time.
 
 ## The cycle
 

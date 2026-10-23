@@ -8,7 +8,7 @@ edezacas shared AI skills in the [agentskills.io](https://agentskills.io) format
 |---|---|---|
 | `angular-conventions` | automatic | Core Angular conventions: standalone components, `input()`/`output()`, signals, `inject()`, `takeUntilDestroyed`, `@if`/`@for` |
 | `code-design` | automatic | A few clean-code rules for software architecture, to avoid over-engineering |
-| `decision-records` | automatic | ADR limits: one decision in 20 lines, the user's reason and nothing invented, no code and no history, in the shape the repo already uses |
+| `decision-records` | automatic | ADR limits: one decision in 20 lines, a stated reason and nothing invented, no code and no history, in the shape the repo already uses |
 | `init-project` | automatic | Guide for creating and editing `CLAUDE.md` and `AGENTS.md` in any project, for any agent |
 | `tdd` | automatic | Test-driven development: the red → green loop, seams, and what makes a test worthless |
 | `web-performance` | automatic | Measure-first web performance loop: renders, bundle, requests and caching, slow queries and N+1, images/fonts/scripts |

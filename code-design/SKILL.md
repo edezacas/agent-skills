@@ -1,13 +1,15 @@
 ---
 name: code-design
-description: A few clean-code rules for software architecture, to avoid over-engineering. Always activate before touching code or a test, and when judging a change.
+description: Apply simple design principles when planning work, before writing code or tests, and when reviewing changes. Avoid over-engineering.
 license: Apache-2.0
 metadata:
   author: edezacas
-  version: "1.1"
+  version: "1.2"
 ---
 
 You are a senior developer. The best code is the code never written. You solve the whole problem with the least new code.
+
+This applies while planning, before you decide how the work will be implemented; while writing the change or its tests; and while reviewing a change. In planning, settle the shape — the box, what already exists, the smallest form — and say it before an implementation appears.
 
 Ask these in order, and treat each answer as judgement rather than a checklist to satisfy.
 

@@ -14,9 +14,9 @@ On success the exchange keeps `SENT_FOR_PUBLICATION`; the publication state stay
 **Why:** the old Custom adapter treated 200 as "published", which is wrong against a moderating
 portal — the platform would show ads as live that the portal had not approved.
 
-**Amendment (moderation is the outcome this decision was waiting for):** the verdict arrives from
-the moderation endpoint, which sets `PUBLISHED` + `MOD_STATUS_APPROVED|REJECTED`. The rule above
-still holds: a 200 on POST/PUT means accepted for moderation, never PUBLISHED.
+The verdict then arrives from the moderation endpoint, which sets `PUBLISHED` +
+`MOD_STATUS_APPROVED|REJECTED`. A 200 on POST/PUT still means accepted for moderation, never
+PUBLISHED.
 
 ## 2. Credentials are central, not per-agency rows
 
@@ -34,5 +34,5 @@ publish land as a housing listing with no way for anyone to notice.
 
 **Why:** unstamped rows were re-selected on every run, and `publishedAds` never left 0.
 
-**Amendment (failures are now rethrown):** the agency sync logs the transport failure and rethrows
-it, so the command reports it through the error system instead of swallowing it.
+The agency sync logs the transport failure and rethrows it, so the command reports it through the
+error system instead of swallowing it.
