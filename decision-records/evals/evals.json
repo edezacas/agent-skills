@@ -1,0 +1,206 @@
+{
+  "skill_name": "decision-records",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Use a Map instead of a plain object for the in-memory session cache, lookups are faster. Refactor it.",
+      "expected_output": "The agent makes or discusses the change without recording a decision. It may say in one line that this does not deserve a record; it must not write one.",
+      "assertions": [
+        {
+          "text": "The response does not create any file under docs/decisions, docs/adr or any other decision folder.",
+          "guardrail": true
+        },
+        {
+          "text": "The response does not draft a decision record for this change.",
+          "guardrail": true
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Refunds: we do not auto-refund orders older than 30 days. Support reviews those by hand, because card networks allow disputes up to 60 days and we want a human in the loop before that window closes. Implement it.",
+      "expected_output": "The agent implements the rule and records one ADR whose reason is exactly the one the user gave: the 60-day dispute window and the human in the loop. It invents no further rationale.",
+      "assertions": [
+        "The response creates a single decision record.",
+        "The recorded reason mentions the 60-day dispute window and the human review.",
+        "The recorded reason contains no rationale the user did not give, such as fraud statistics, cost savings or industry practice.",
+        "The record is a numbered file under docs/decisions/, not a domain doc or a diary entry."
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Refunds are never automatic: every refund request goes to an operator for approval, whatever the amount. Implement it.",
+      "expected_output": "The agent records the rule, which qualifies, and does not invent the reason the user never gave: it asks one short question or writes that the reason is not stated.",
+      "assertions": [
+        "The response records the decision that every refund needs operator approval.",
+        "The response does not state a business or regulatory reason that the user never gave.",
+        "The recorded reason is marked as not stated, or the response asks one short question about it.",
+        {
+          "text": "The response does not fabricate a justification for the rule.",
+          "guardrail": true
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Prices now need four decimals for wholesale customers, so stop storing money as integer cents and keep it as a decimal string instead. This replaces the current rule, because wholesale buyers get four-decimal quotes from the exchange.",
+      "files": [
+        "evals/files/docs/adr/0007-store-money-as-integer-cents.md"
+      ],
+      "expected_output": "The agent finds the existing docs/adr setup and rewrites record 7 in place: same folder, same number, new slug if needed, the old rule gone from the folder, and the reason for the rule now in force.",
+      "assertions": [
+        "The response keeps the record under docs/adr instead of creating docs/decisions.",
+        "The response keeps the number 0007 instead of creating a new 0008 record.",
+        "The response does not leave a copy of the old rule in the folder, in an archive folder or as a superseded status.",
+        "The response states the reason for the rule now in force, the four-decimal wholesale quotes.",
+        "The response does not add a paragraph to the record explaining what the old rule was.",
+        {
+          "text": "The response does not create a second decision folder or an index file.",
+          "guardrail": true
+        }
+      ],
+      "note": "fixture: numbered files with no status field, so the state model applies"
+    },
+    {
+      "id": 6,
+      "prompt": "Sessions have to be revocable the moment someone logs out, so stop using signed cookies and keep the session identifier in Redis instead.",
+      "files": [
+        "evals/files/docs/adr/0003-use-jwt.md",
+        "evals/files/docs/adr/0011-store-sessions-in-signed-cookies.md"
+      ],
+      "expected_output": "The agent recognises docs/adr as a log, appends record 12 in the folder's own format with its status field, marks 11 as superseded by 12, leaves the body of 11 untouched, and states the reason for the new record.",
+      "assertions": [
+        "The response writes the new record under docs/adr instead of creating docs/decisions.",
+        "The response numbers the new record 0012.",
+        "The response marks record 11 as superseded by the new record, using the folder's status field.",
+        "The response leaves the decision text of record 11 unchanged.",
+        "The response keeps the already superseded records instead of deleting them.",
+        "The new record states the reason: revocation has to happen the moment someone logs out.",
+        {
+          "text": "The response does not write a second decision folder or an index file.",
+          "guardrail": true
+        }
+      ],
+      "note": "fixture: a log — statuses and several records per topic — followed as the repo does"
+    },
+    {
+      "id": 7,
+      "prompt": "In the properties domain, an agency can now publish a listing before the owner signs the mandate. The owner has 48 hours to reject it, because agencies said the signature step was delaying listings by weeks.",
+      "files": [
+        "evals/files/docs/decisions/properties.md"
+      ],
+      "expected_output": "The agent treats properties.md as the repo's structure, adds the new decision as a section there, writes that section with the fields the skill requires including the reason the user gave, leaves the existing sections untouched, and does not build a parallel numbered structure.",
+      "assertions": [
+        "The response writes the new decision into docs/decisions/properties.md.",
+        "The response adds it as a new section instead of creating a numbered file.",
+        "The new section carries a reason slot filled with what the user gave, the delay the signature step caused.",
+        "The response leaves the commission and listing publication sections unchanged.",
+        {
+          "text": "The response does not create a parallel numbered folder or a second decision file.",
+          "guardrail": true
+        }
+      ],
+      "note": "fixture: one doc per domain, decisions as sections instead of files"
+    },
+    {
+      "id": 8,
+      "prompt": "Payments: retries are capped at 3 attempts. The provider charges per call after the third, and their docs warn that a retry storm can suspend the account. Record it. The retry code is in src/RetryPolicy.ts.",
+      "files": [
+        "evals/files/src/RetryPolicy.ts"
+      ],
+      "expected_output": "The agent writes one short record about the attempt cap, with the provider's per-call charge and suspension risk as the reason, and without quoting the classes, constants or file path from the implementation.",
+      "assertions": [
+        "The response creates one record of about a page at most.",
+        "The record states the three-attempt cap and the per-call charge from the third attempt as the reason.",
+        "The record does not quote identifiers, class names or file paths from the implementation.",
+        "The record does not describe how the retry loop works.",
+        {
+          "text": "The record does not invent a reason the user did not give.",
+          "guardrail": true
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "prompt": "The exchange now answers 202 instead of 200 on a successful POST, and it means the same as a 200. Update the record.",
+      "files": [
+        "evals/files/docs/decisions/exchange.md"
+      ],
+      "expected_output": "The agent rewrites the sentence of decision 1 so that 202 is covered, adds no amendment block, and leaves the other decisions alone.",
+      "assertions": [
+        "The response rewrites decision 1 so that the 202 is covered, instead of appending something new.",
+        "The response adds no text labelled Amendment or amendment.",
+        "The response leaves decisions 2, 3 and 4 unchanged.",
+        {
+          "text": "The response does not create a second record or a second decision folder.",
+          "guardrail": true
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "prompt": "Hash the API tokens with SHA-256 instead of bcrypt. The reverse proxy recomputes the token hash on every request and bcrypt costs about 80ms per call, which we cannot afford at that volume. And we cannot switch again later without logging every user out, so this is one way.",
+      "expected_output": "The agent records the decision with its intrinsic technical reason, the per-request recomputation cost of bcrypt, and the cost of changing it again, without a generic claim about speed.",
+      "assertions": [
+        "The response records the decision to hash tokens with SHA-256.",
+        "The record states the reason: the proxy recomputes the hash on every request and bcrypt is too slow for that.",
+        "The record states the cost: changing the algorithm again would log every user out.",
+        "The record does not reduce the reason to a generic claim that SHA-256 is faster.",
+        {
+          "text": "The record does not name internal classes or methods of the codebase.",
+          "guardrail": true
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "prompt": "The Acme contract requires us to remove a property from the portal within 24 hours of a removal request, and later than that is a breach with a 2% monthly penalty. Record it. The contract is docs/contracts/acme-2026.md.",
+      "files": [
+        "evals/files/docs/contracts/acme-2026.md"
+      ],
+      "expected_output": "The agent records what was decided about the contract in a short record: the 24-hour window and the penalty as the cost. It does not copy the clause into the record.",
+      "assertions": [
+        "The record is at most 20 lines.",
+        "The record states the 24-hour removal window as the decision.",
+        "The record states the cost: breach of contract and the 2% monthly penalty.",
+        {
+          "text": "The record does not reproduce or paraphrase the contract clause at length.",
+          "guardrail": true
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "prompt": "Write documentation for the retry module: explain how the attempt loop and the delay selection work, for the next person reading the code.",
+      "files": [
+        "evals/files/src/RetryPolicy.ts"
+      ],
+      "expected_output": "The agent does not turn this into a decision record: describing how the code works is documentation, not a decision the code cannot explain.",
+      "assertions": [
+        {
+          "text": "The response does not create a decision record.",
+          "guardrail": true
+        },
+        {
+          "text": "The response does not treat the retry loop itself as a decision to be recorded.",
+          "guardrail": true
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "prompt": "The billing feature is done. Record the decisions in `docs/decisions/billing.md` the way this repo does it, with the full context from the spec so the next person has everything: the two weeks we spent comparing providers, the two we discarded, and how the retry logic ended up where it is. The decision: invoices are generated on the customer's local calendar day, not UTC, because invoicing a customer for a day they have not had yet caused complaints.",
+      "expected_output": "The agent records the one decision in a short file: invoices follow the customer's local calendar day, with the complaints as the reason. The provider comparison and the weeks spent on it are history and stay out.",
+      "assertions": [
+        "The record is at most 20 lines.",
+        "The record states the decision: invoices follow the customer's local calendar day.",
+        "The record states the reason: invoicing a day the customer has not had yet caused complaints.",
+        "The record leaves out the provider comparison and the two weeks spent on it.",
+        {
+          "text": "The response does not create a second decisions folder or document how the code works.",
+          "guardrail": true
+        }
+      ]
+    }
+  ]
+}

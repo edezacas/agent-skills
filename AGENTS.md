@@ -39,6 +39,8 @@ angular-conventions/SKILL.md          # Core Angular patterns — triggers autom
 angular-conventions/evals/evals.json  # convention violation cases
 code-design/SKILL.md                  # Architecture judgement, no over-engineering — triggers automatically
 code-design/evals/evals.json          # over-engineering guardrail cases
+decision-records/SKILL.md             # ADR limits: one decision, 20 lines, no code, no history
+decision-records/evals/evals.json     # budget, history, code-leak and invented-reason cases
 init-project/SKILL.md                 # CLAUDE.md / AGENTS.md creation guide — triggers automatically
 init-project/evals/evals.json         # bloated/section-mixing guardrail cases
 tdd/SKILL.md                          # Red → green loop and test quality — triggers automatically
