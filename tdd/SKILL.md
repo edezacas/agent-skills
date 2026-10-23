@@ -4,25 +4,38 @@ description: Test-driven development. Use when the user wants to build features 
 license: Apache-2.0
 metadata:
   author: edezacas
-  version: "1.0"
+  version: "1.1"
 ---
 
-TDD is the red → green loop. The failing test comes first, then only enough code to pass it.
+# Test-driven development
 
-Agree the seam before writing. With a user in the session, ask. In a headless run there is nobody
-to ask, so the seam is the one the task or plan named. Test at that seam, through the public
-interface. No mocking internal collaborators, no private methods, no asserting through a side
-channel.
+Red → green, one cycle at a time: the failing test comes first, then only enough code to pass it.
 
-Expected values come from an independent source, a known-good literal, a worked example, the spec.
-Never recompute them the way the code computes them.
+## The cycle
 
-Mock only what you don't own, such as network, time or the filesystem. Never your own modules.
+1. **Agree the seam** before writing. With a user in the session, ask. In a headless run there is nobody to ask, so the seam is the one the task or plan named.
+2. **One failing test** at that seam.
+3. **Only the code that passes it.**
+4. **The next test** once the previous one is green. Never all tests and then all code.
 
-One test, one seam, one implementation per cycle. Never all tests and then all code. Refactoring
-isn't part of this loop.
+Refactoring isn't part of this loop.
 
-Three things make a test worthless. It asserts how the code works instead of what it does, so a
-refactor breaks it without changing behaviour. Its expected value is computed the way the code
-computes it, so it passes by construction. It arrived in a batch before the code existed, so it
-asserts imagined behaviour rather than what the task asked for.
+## The seam
+
+Test through the public interface. No mocking internal collaborators, no private methods, no asserting through a side channel.
+
+## Expected values
+
+From an independent source: a known-good literal, a worked example, the spec. Never recompute them the way the code computes them.
+
+## Mocks
+
+Only what you don't own, such as network, time or the filesystem. Never your own modules.
+
+## A test worth nothing
+
+| Shape | Why it is worthless |
+|---|---|
+| It asserts how the code works, not what it does | a refactor breaks it without changing behaviour |
+| Its expected value is computed the way the code computes it | it passes by construction |
+| It arrived in a batch before the code existed | it asserts imagined behaviour, not what the task asked for |
