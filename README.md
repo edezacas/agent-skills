@@ -1,5 +1,14 @@
 # edezacas Skills
 
+> [!WARNING]
+> **Deprecated.** This repository is no longer maintained. The skills continue in [edezacas/ai-factory](https://github.com/edezacas/ai-factory), where they are measured and kept up to date. Install them with:
+>
+> ```bash
+> npx skills add edezacas/ai-factory
+> ```
+>
+> `decision-records` has not moved yet.
+
 edezacas shared AI skills in the [agentskills.io](https://agentskills.io) format. Work with Claude Code, opencode, pi, OpenAI Codex, VS Code Copilot, and any compatible agent.
 
 ## Skills

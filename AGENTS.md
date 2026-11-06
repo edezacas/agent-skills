@@ -1,5 +1,7 @@
 # edezacas Skills
 
+Deprecated: new work belongs in https://github.com/edezacas/ai-factory.
+
 ## Overview
 edezacas shared AI coding skills. Each skill is a directory with a `SKILL.md` file following the agentskills.io format.
 
